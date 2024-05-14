@@ -1,0 +1,28 @@
+class Solution {
+    public int getMaximumGold(int[][] field) {
+        int best = 0;
+
+        for (int r = 0; r < field.length; ++r) {
+            for (int c = 0; c < field[0].length; ++c) {
+                best = Math.max(best, explore(field, r, c));
+            }
+        }
+
+        return best;
+    }
+
+    private int explore(int[][] field, int row, int col) {
+        if (row < 0 || col < 0 || row == field.length || col == field[0].length || field[row][col] == 0)
+            return 0;
+
+        int gold = field[row][col];
+        field[row][col] = 0; // Mark as visited.
+
+        int maxPath = Math.max(Math.max(explore(field, row + 1, col), explore(field, row - 1, col)),
+                               Math.max(explore(field, row, col + 1), explore(field, row, col - 1)));
+
+        field[row][col] = gold; // Backtrack.
+
+        return gold + maxPath;
+    }
+}
