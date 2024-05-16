@@ -1,0 +1,10 @@
+class Solution {
+  public boolean evaluateTree(TreeNode node) {
+    if (node.val < 2)
+      return node.val == 1;
+    if (node.val == 2) // OR
+      return evaluateTree(node.left) || evaluateTree(node.right);
+    // AND
+    return evaluateTree(node.left) && evaluateTree(node.right);
+  }
+}
