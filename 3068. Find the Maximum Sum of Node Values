@@ -1,0 +1,17 @@
+class Solution {
+  public long maximumValueSum(int[] values, int modifier, int[][] connections) {
+    long totalSum = 0;
+    int alterationCount = 0;
+    int smallestDiff = Integer.MAX_VALUE;
+
+    for (final int value : values) {
+      totalSum += Math.max(value, value ^ modifier);
+      alterationCount += ((value ^ modifier) > value) ? 1 : 0;
+      smallestDiff = Math.min(smallestDiff, Math.abs(value - (value ^ modifier)));
+    }
+
+    if (alterationCount % 2 == 0)
+      return totalSum;
+    return totalSum - smallestDiff;
+  }
+}
