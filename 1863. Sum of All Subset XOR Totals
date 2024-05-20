@@ -1,0 +1,14 @@
+class Solution {
+  public int subsetXORSum(int[] elements) {
+    return dfs(elements, 0, 0);
+  }
+
+  private int dfs(int[] elements, int index, int currentXOR) {
+    if (index == elements.length)
+      return currentXOR;
+
+    final int includeCurrent = dfs(elements, index + 1, currentXOR);
+    final int excludeCurrent = dfs(elements, index + 1, elements[index] ^ currentXOR);
+    return includeCurrent + excludeCurrent;
+  }
+}
