@@ -1,0 +1,17 @@
+class Solution {
+  public List<List<Integer>> subsets(int[] elements) {
+    List<List<Integer>> results = new ArrayList<>();
+    dfs(elements, 0, new ArrayList<>(), results);
+    return results;
+  }
+
+  private void dfs(int[] elements, int start, List<Integer> currentPath, List<List<Integer>> results) {
+    results.add(new ArrayList<>(currentPath));
+
+    for (int index = start; index < elements.length; ++index) {
+      currentPath.add(elements[index]);
+      dfs(elements, index + 1, currentPath, results);
+      currentPath.remove(currentPath.size() - 1);
+    }
+  }
+}
