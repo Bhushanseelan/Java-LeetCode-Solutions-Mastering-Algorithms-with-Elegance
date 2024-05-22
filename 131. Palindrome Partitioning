@@ -1,0 +1,28 @@
+class Solution {
+  public List<List<String>> partition(String str) {
+    List<List<String>> result = new ArrayList<>();
+    dfs(str, 0, new ArrayList<>(), result);
+    return result;
+  }
+
+  private void dfs(final String str, int startIndex, List<String> currentPath, List<List<String>> result) {
+    if (startIndex == str.length()) {
+      result.add(new ArrayList<>(currentPath));
+      return;
+    }
+
+    for (int endIndex = startIndex; endIndex < str.length(); ++endIndex)
+      if (isPalindrome(str, startIndex, endIndex)) {
+        currentPath.add(str.substring(startIndex, endIndex + 1));
+        dfs(str, endIndex + 1, currentPath, result);
+        currentPath.remove(currentPath.size() - 1);
+      }
+  }
+
+  private boolean isPalindrome(final String str, int left, int right) {
+    while (left < right)
+      if (str.charAt(left++) != str.charAt(right--))
+        return false;
+    return true;
+  }
+}
