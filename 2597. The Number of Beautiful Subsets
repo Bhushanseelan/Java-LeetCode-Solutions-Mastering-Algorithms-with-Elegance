@@ -1,0 +1,28 @@
+class Solution {
+  public int beautifulSubsets(int[] elements, int divisor) {
+    final int maxElementValue = 1000;
+    int[] frequency = new int[maxElementValue + 1];
+    Map<Integer, Set<Integer>> remainderToSubset = new HashMap<>();
+
+    for (final int element : elements) {
+      ++frequency[element];
+      remainderToSubset.putIfAbsent(element % divisor, new TreeSet<>());
+      remainderToSubset.get(element % divisor).add(element);
+    }
+
+    int previousElement = -divisor;
+    int skipCount = 0;
+    int pickCount = 0;
+
+    for (Set<Integer> subset : remainderToSubset.values())
+      for (final int element : subset) {
+        final int nonEmptySubsetCount = (int) Math.pow(2, frequency[element]) - 1;
+        final int cachedSkipCount = skipCount;
+        skipCount += pickCount;
+        pickCount = nonEmptySubsetCount * (1 + cachedSkipCount + (element - previousElement == divisor ? 0 : pickCount));
+        previousElement = element;
+      }
+
+    return skipCount + pickCount;
+  }
+}
