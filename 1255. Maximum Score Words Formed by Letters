@@ -1,0 +1,52 @@
+import java.util.HashMap;
+import java.util.Map;
+
+class Solution {
+  public int maxScoreWords(String[] words, char[] letters, int[] scores) {
+    int[] letterCounts = new int[26];
+    for (char letter : letters) {
+      letterCounts[letter - 'a']++;
+    }
+
+    Map<String, Integer> memo = new HashMap<>();
+    return dfs(words, letterCounts, scores, 0, memo);
+  }
+
+  private int dfs(String[] words, int[] letterCounts, int[] scores, int index, Map<String, Integer> memo) {
+    if (index == words.length) {
+      return 0;
+    }
+
+    String key = index + encode(letterCounts);
+    if (memo.containsKey(key)) {
+      return memo.get(key);
+    }
+
+    int maxScore = dfs(words, letterCounts, scores, index + 1, memo);
+    int currentScore = 0;
+    boolean isValid = true;
+    int[] tempCounts = letterCounts.clone();
+
+    for (char c : words[index].toCharArray()) {
+      if (--tempCounts[c - 'a'] < 0) {
+        isValid = false;
+      }
+      currentScore += scores[c - 'a'];
+    }
+
+    if (isValid) {
+      maxScore = Math.max(maxScore, currentScore + dfs(words, tempCounts, scores, index + 1, memo));
+    }
+
+    memo.put(key, maxScore);
+    return maxScore;
+  }
+
+  private String encode(int[] letterCounts) {
+    StringBuilder sb = new StringBuilder();
+    for (int count : letterCounts) {
+      sb.append((char) (count + 'a'));
+    }
+    return sb.toString();
+  }
+}
