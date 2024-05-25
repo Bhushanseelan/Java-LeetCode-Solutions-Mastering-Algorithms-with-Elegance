@@ -1,0 +1,31 @@
+class Solution {
+  public List<String> wordBreak(String str, List<String> dict) {
+    Set<String> wordSet = new HashSet<>(dict);
+    Map<String, List<String>> memo = new HashMap<>();
+    return wordBreak(str, wordSet, memo);
+  }
+
+  private List<String> wordBreak(final String str, Set<String> wordSet,
+                                 Map<String, List<String>> memo) {
+    if (memo.containsKey(str))
+      return memo.get(str);
+
+    List<String> result = new ArrayList<>();
+
+    // 1 <= prefix.length() < str.length()
+    for (int idx = 1; idx < str.length(); ++idx) {
+      final String prefix = str.substring(0, idx);
+      final String suffix = str.substring(idx);
+      if (wordSet.contains(prefix))
+        for (final String word : wordBreak(suffix, wordSet, memo))
+          result.add(prefix + " " + word);
+    }
+
+   
+    if (wordSet.contains(str))
+      result.add(str);
+
+    memo.put(str, result);
+    return result;
+  }
+}
