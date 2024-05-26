@@ -1,0 +1,22 @@
+class Solution {
+  public int checkRecord(int n) {
+    final int kMod = 1_000_000_007;
+    long[] prev = new long[6];  // dp[0][0], dp[0][1], dp[0][2], dp[1][0], dp[1][1], dp[1][2]
+    long[] curr = new long[6];
+    prev[0] = 1;
+
+    while (n-- > 0) {
+      curr[0] = (prev[0] + prev[1] + prev[2]) % kMod;  // dp[0][0]
+      curr[1] = prev[0];                               // dp[0][1]
+      curr[2] = prev[1];                               // dp[0][2]
+      curr[3] = (prev[0] + prev[1] + prev[2] + prev[3] + prev[4] + prev[5]) % kMod;  // dp[1][0]
+      curr[4] = prev[3];                               // dp[1][1]
+      curr[5] = prev[4];                               // dp[1][2]
+
+      // Copy current values to previous for the next iteration
+      System.arraycopy(curr, 0, prev, 0, 6);
+    }
+
+    return (int) ((prev[0] + prev[1] + prev[2] + prev[3] + prev[4] + prev[5]) % kMod);
+  }
+}
