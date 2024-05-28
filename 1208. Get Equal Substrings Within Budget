@@ -1,0 +1,18 @@
+class Solution {
+    public int equalSubstring(String str1, String str2, int maxAllowedCost) {
+        int strLength = str1.length();
+        int currentCost = 0;
+        int maxLengthFound = 0;
+
+        for (int windowStart = 0, windowEnd = 0; windowEnd < strLength; ++windowEnd) {
+            currentCost += Math.abs(str1.charAt(windowEnd) - str2.charAt(windowEnd));
+            while (currentCost > maxAllowedCost) {
+                currentCost -= Math.abs(str1.charAt(windowStart) - str2.charAt(windowStart));
+                ++windowStart;
+            }
+            maxLengthFound = Math.max(maxLengthFound, windowEnd - windowStart + 1);
+        }
+
+        return maxLengthFound;
+    }
+}
