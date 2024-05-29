@@ -1,0 +1,21 @@
+class Solution {
+  public int numSteps(String str) {
+    int steps = 0;
+    StringBuilder sb = new StringBuilder(str);
+
+    while (sb.charAt(sb.length() - 1) == '0') {
+      sb.deleteCharAt(sb.length() - 1);
+      ++steps;
+    }
+
+    if (sb.toString().equals("1"))
+      return steps;
+
+    ++steps;
+
+    for (final char ch : sb.toString().toCharArray())
+      steps += ch == '1' ? 1 : 2;
+
+    return steps;
+  }
+}
