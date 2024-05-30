@@ -1,0 +1,30 @@
+class Solution {
+    public int countTriplets(int[] arr) {
+        int length = arr.length;
+        int[] prefixXor = new int[length + 1];
+
+        // Compute the prefix XOR array
+        for (int i = 0; i < length; ++i) {
+            prefixXor[i + 1] = prefixXor[i] ^ arr[i];
+        }
+
+        int count = 0;
+
+        // Use a hash map to store the frequency of each prefix XOR and the sum of indices
+        Map<Integer, Integer> xorFreq = new HashMap<>();
+        Map<Integer, Integer> xorIndexSum = new HashMap<>();
+
+        for (int k = 0; k < length; ++k) {
+            // Check if prefixXor[k + 1] has been seen before
+            if (xorFreq.containsKey(prefixXor[k + 1])) {
+                count += xorFreq.get(prefixXor[k + 1]) * k - xorIndexSum.get(prefixXor[k + 1]);
+            }
+
+            // Update the maps with the current prefix XOR
+            xorFreq.put(prefixXor[k], xorFreq.getOrDefault(prefixXor[k], 0) + 1);
+            xorIndexSum.put(prefixXor[k], xorIndexSum.getOrDefault(prefixXor[k], 0) + k);
+        }
+
+        return count;
+    }
+}
