@@ -1,0 +1,10 @@
+class Solution {
+  public int scoreOfString(String input) {
+    int totalScore = 0;
+
+    for (int index = 1; index < input.length(); ++index)
+      totalScore += Math.abs(input.charAt(index) - input.charAt(index - 1));
+
+    return totalScore;
+  }
+}
