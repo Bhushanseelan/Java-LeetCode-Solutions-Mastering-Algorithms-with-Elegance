@@ -1,0 +1,12 @@
+class Solution {
+  public int appendCharacters(String source, String target) {
+    int targetIndex = 0; // target's index
+
+    for (final char character : source.toCharArray())
+      if (character == target.charAt(targetIndex))
+        if (++targetIndex == target.length())
+          return 0;
+
+    return target.length() - targetIndex;
+  }
+}
