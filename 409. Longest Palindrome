@@ -1,0 +1,15 @@
+class Solution {
+    public int longestPalindrome(String inputString) {
+        int palindromeLength = 0;
+        int[] characterCount = new int[128];
+
+        for (final char character : inputString.toCharArray())
+            ++characterCount[character];
+
+        for (final int frequency : characterCount)
+            palindromeLength += frequency % 2 == 0 ? frequency : frequency - 1;
+
+        final boolean hasOddFrequency = Arrays.stream(characterCount).anyMatch(freq -> freq % 2 == 1);
+        return palindromeLength + (hasOddFrequency ? 1 : 0);
+    }
+}
