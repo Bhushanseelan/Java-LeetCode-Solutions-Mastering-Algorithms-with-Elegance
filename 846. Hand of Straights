@@ -1,0 +1,20 @@
+import java.util.TreeMap;
+
+class Solution {
+  public boolean isNStraightHand(int[] hand, int groupSize) {
+    TreeMap<Integer, Integer> cardCount = new TreeMap<>();
+
+    for (final int card : hand)
+      cardCount.merge(card, 1, Integer::sum);
+
+    for (final int firstCard : cardCount.keySet()) {
+      final int cardFrequency = cardCount.getOrDefault(firstCard, 0);
+      if (cardFrequency > 0)
+        for (int card = firstCard; card < firstCard + groupSize; ++card)
+          if (cardCount.merge(card, -cardFrequency, Integer::sum) < 0)
+            return false;
+    }
+
+    return true;
+  }
+}
