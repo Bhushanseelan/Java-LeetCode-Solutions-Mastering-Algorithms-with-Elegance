@@ -1,0 +1,46 @@
+class Trie {
+    private Trie[] branches = new Trie[26];
+    private int index = -1;
+
+    public void insert(String word, int pos) {
+        Trie currentNode = this;
+        for (int j = 0; j < word.length(); ++j) {
+            int charIndex = word.charAt(j) - 'a';
+            if (currentNode.branches[charIndex] == null) {
+                currentNode.branches[charIndex] = new Trie();
+            }
+            currentNode = currentNode.branches[charIndex];
+        }
+        currentNode.index = pos;
+    }
+
+    public int search(String word) {
+        Trie currentNode = this;
+        for (int j = 0; j < word.length(); ++j) {
+            int charIndex = word.charAt(j) - 'a';
+            if (currentNode.branches[charIndex] == null) {
+                return -1;
+            }
+            currentNode = currentNode.branches[charIndex];
+            if (currentNode.index != -1) {
+                return currentNode.index;
+            }
+        }
+        return -1;
+    }
+}
+
+class Solution {
+    public String replaceWords(List<String> dictionary, String sentence) {
+        Trie trie = new Trie();
+        for (int i = 0; i < dictionary.size(); ++i) {
+            trie.insert(dictionary.get(i), i);
+        }
+        List<String> result = new ArrayList<>();
+        for (String word : sentence.split("\\s")) {
+            int pos = trie.search(word);
+            result.add(pos == -1 ? word : dictionary.get(pos));
+        }
+        return String.join(" ", result);
+    }
+}
