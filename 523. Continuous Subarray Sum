@@ -1,0 +1,26 @@
+import java.util.HashMap;
+import java.util.Map;
+
+class Solution {
+  public boolean checkSubarraySum(int[] array, int divisor) {
+    int cumulativeSum = 0;
+    Map<Integer, Integer> sumToIndex = new HashMap<>();
+    sumToIndex.put(0, -1);
+
+    for (int index = 0; index < array.length; ++index) {
+      cumulativeSum += array[index];
+      if (divisor != 0)
+        cumulativeSum %= divisor;
+
+      Integer prevIndex = sumToIndex.get(cumulativeSum);
+      if (prevIndex != null) {
+        if (index - prevIndex > 1)
+          return true;
+      } else {
+        sumToIndex.put(cumulativeSum, index);
+      }
+    }
+
+    return false;
+  }
+}
