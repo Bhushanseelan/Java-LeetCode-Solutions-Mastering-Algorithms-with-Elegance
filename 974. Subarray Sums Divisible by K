@@ -1,0 +1,16 @@
+class Solution {
+  public int subarraysDivByK(int[] nums, int k) {
+    int result = 0;
+    int cumulativeSum = 0;
+    int[] remainderCount = new int[k];
+    remainderCount[0] = 1;
+
+    for (final int value : nums) {
+      cumulativeSum = (cumulativeSum + value % k + k) % k;
+      result += remainderCount[cumulativeSum];
+      ++remainderCount[cumulativeSum];
+    }
+
+    return result;
+  }
+}
