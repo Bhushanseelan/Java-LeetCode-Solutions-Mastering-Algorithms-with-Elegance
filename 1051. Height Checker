@@ -1,0 +1,20 @@
+class Solution {
+  public int heightChecker(int[] heights) {
+    int mismatchCount = 0;
+    int expectedHeight = 1;
+    int[] heightFrequency = new int[101];
+
+    for (int height : heights)
+      ++heightFrequency[height];
+
+    for (int height : heights) {
+      while (heightFrequency[expectedHeight] == 0)
+        ++expectedHeight;
+      if (height != expectedHeight)
+        ++mismatchCount;
+      --heightFrequency[expectedHeight];
+    }
+
+    return mismatchCount;
+  }
+}
