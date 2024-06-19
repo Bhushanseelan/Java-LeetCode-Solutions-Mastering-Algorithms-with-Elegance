@@ -1,0 +1,36 @@
+class Solution {
+  public int minDays(int[] bloomDay, int bouquetCount, int flowersPerBouquet) {
+    if (bloomDay.length < (long) bouquetCount * flowersPerBouquet)
+      return -1;
+
+    int minDays = Arrays.stream(bloomDay).min().getAsInt();
+    int maxDays = Arrays.stream(bloomDay).max().getAsInt();
+
+    while (minDays < maxDays) {
+      final int midDays = (minDays + maxDays) / 2;
+      if (calculateBouquets(bloomDay, flowersPerBouquet, midDays) >= bouquetCount)
+        maxDays = midDays;
+      else
+        minDays = midDays + 1;
+    }
+
+    return minDays;
+  }
+
+  // Returns the number of bouquets (flowersPerBouquet flowers needed) that can be made after `waitDays`.
+  private int calculateBouquets(int[] bloomDay, int flowersPerBouquet, int waitDays) {
+    int bouquetCounter = 0;
+    int flowersNeeded = flowersPerBouquet;
+    for (final int day : bloomDay) {
+      if (day > waitDays) {
+        // Reset `flowersNeeded` since there were not enough adjacent flowers.
+        flowersNeeded = flowersPerBouquet;
+      } else if (--flowersNeeded == 0) {
+        // Use flowersPerBouquet adjacent flowers to make a bouquet.
+        ++bouquetCounter;
+        flowersNeeded = flowersPerBouquet;
+      }
+    }
+    return bouquetCounter;
+  }
+}
