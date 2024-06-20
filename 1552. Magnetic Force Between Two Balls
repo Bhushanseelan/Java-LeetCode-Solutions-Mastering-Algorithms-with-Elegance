@@ -1,0 +1,29 @@
+class Solution {
+  public int maxDistance(int[] position, int m) {
+    Arrays.sort(position);
+
+    int left = 1;
+    int right = position[position.length - 1] - position[0];
+
+    while (left < right) {
+      final int midDistance = right - (right - left) / 2;
+      if (calculateBalls(position, midDistance) >= m) // There are too many balls.
+        left = midDistance;
+      else // There are too few balls.
+        right = midDistance - 1;
+    }
+
+    return left;
+  }
+
+  private int calculateBalls(int[] position, int minForce) {
+    int ballCount = 0;
+    int lastPosition = -minForce;
+    for (final int pos : position)
+      if (pos - lastPosition >= minForce) {
+        ballCount++;
+        lastPosition = pos;
+      }
+    return ballCount;
+  }
+}
