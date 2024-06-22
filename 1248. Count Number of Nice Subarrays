@@ -1,0 +1,28 @@
+class Solution {
+  public int numberOfSubarrays(int[] nums, int k) {
+    return countSubarraysWithAtMost(nums, k) - countSubarraysWithAtMost(nums, k - 1);
+  }
+
+  private int countSubarraysWithAtMost(int[] nums, int maxOdd) {
+    int result = 0;
+    int left = 0;
+    int right = 0;
+
+    while (right <= nums.length) {
+      if (maxOdd >= 0) {
+        result += right - left;
+        if (right == nums.length)
+          break;
+        if (nums[right] % 2 == 1)
+          --maxOdd;
+        ++right;
+      } else {
+        if (nums[left] % 2 == 1)
+          ++maxOdd;
+        ++left;
+      }
+    }
+
+    return result;
+  }
+}
