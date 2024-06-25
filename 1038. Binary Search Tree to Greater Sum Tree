@@ -1,0 +1,38 @@
+class Solution {
+    public TreeNode bstToGst(TreeNode root) {
+        int accumulatedSum = 0;
+        TreeNode originalRoot = root;
+
+        while (root != null) {
+            if (root.right == null) {
+                accumulatedSum += root.val;
+                root.val = accumulatedSum;
+                root = root.left;
+            } else {
+                TreeNode successor = root.right;
+                while (successor.left != null && successor.left != root) {
+                    successor = successor.left;
+                }
+
+                if (successor.left == null) {
+                    successor.left = root;
+                    root = root.right;
+                } else {
+                    accumulatedSum += root.val;
+                    root.val = accumulatedSum;
+                    successor.left = null;
+                    root = root.left;
+                }
+            }
+        }
+        return originalRoot;
+    }
+}
+
+// Definition for a binary tree node.
+class TreeNode {
+  int val;
+  TreeNode left;
+  TreeNode right;
+  TreeNode(int x) { val = x; }
+}
