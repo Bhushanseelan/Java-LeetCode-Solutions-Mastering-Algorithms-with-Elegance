@@ -1,0 +1,22 @@
+class Solution {
+  public TreeNode balanceBST(TreeNode root) {
+    List<Integer> values = new ArrayList<>();
+    traverseInOrder(root, values);
+    return constructBST(values, 0, values.size() - 1);
+  }
+
+  private void traverseInOrder(TreeNode node, List<Integer> values) {
+    if (node == null)
+      return;
+    traverseInOrder(node.left, values);
+    values.add(node.val);
+    traverseInOrder(node.right, values);
+  }
+
+  private TreeNode constructBST(List<Integer> values, int left, int right) {
+    if (left > right)
+      return null;
+    final int middle = (left + right) / 2;
+    return new TreeNode(values.get(middle), constructBST(values, left, middle - 1), constructBST(values, middle + 1, right));
+  }
+}
