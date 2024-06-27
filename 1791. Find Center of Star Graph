@@ -1,0 +1,7 @@
+class Solution {
+  public int findCenter(int[][] connections) {
+    return connections[0][0] == connections[1][0] || connections[0][0] == connections[1][1] 
+        ? connections[0][0]
+        : connections[0][1];
+  }
+}
