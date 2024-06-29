@@ -1,0 +1,33 @@
+class Solution {
+  public List<List<Integer>> getAncestors(int numNodes, int[][] connections) {
+    List<List<Integer>> ancestorsList = new ArrayList<>();
+    List<Integer>[] adjacencyList = new List[numNodes];
+
+    for (int i = 0; i < numNodes; ++i) {
+      ancestorsList.add(new ArrayList<>());
+      adjacencyList[i] = new ArrayList<>();
+    }
+
+    for (int[] connection : connections) {
+      final int fromNode = connection[0];
+      final int toNode = connection[1];
+      adjacencyList[fromNode].add(toNode);
+    }
+
+    for (int node = 0; node < numNodes; ++node)
+      dfs(adjacencyList, node, node, new boolean[numNodes], ancestorsList);
+
+    return ancestorsList;
+  }
+
+  private void dfs(List<Integer>[] adjacencyList, int currentNode, int ancestorNode, boolean[] visited,
+                   List<List<Integer>> ancestorsList) {
+    visited[currentNode] = true;
+    for (final int neighbor : adjacencyList[currentNode]) {
+      if (visited[neighbor])
+        continue;
+      ancestorsList.get(neighbor).add(ancestorNode);
+      dfs(adjacencyList, neighbor, ancestorNode, visited, ancestorsList);
+    }
+  }
+}
