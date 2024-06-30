@@ -1,0 +1,62 @@
+class UnionFind {
+  public UnionFind(int size) {
+    componentCount = size;
+    parent = new int[size];
+    rank = new int[size];
+    for (int i = 0; i < size; ++i)
+      parent[i] = i;
+  }
+  public boolean unionByRank(int x, int y) {
+    final int rootX = find(x);
+    final int rootY = find(y);
+    if (rootX == rootY)
+      return false;
+    if (rank[rootX] < rank[rootY]) {
+      parent[rootX] = rootY;
+    } else if (rank[rootX] > rank[rootY]) {
+      parent[rootY] = rootX;
+    } else {
+      parent[rootX] = rootY;
+      ++rank[rootY];
+    }
+    --componentCount;
+    return true;
+  }
+  public int getComponentCount() {
+    return componentCount;
+  }
+  private int componentCount;
+  private int[] parent;
+  private int[] rank;
+  private int find(int x) {
+    return parent[x] == x ? x : (parent[x] = find(parent[x]));
+  }
+}
+class Solution {
+  public int maxNumEdgesToRemove(int nodeCount, int[][] edgeList) {
+    UnionFind alice = new UnionFind(nodeCount);
+    UnionFind bob = new UnionFind(nodeCount);
+    int essentialEdges = 0;
+    Arrays.sort(edgeList, (a, b) -> b[0] - a[0]);
+    for (int[] edge : edgeList) {
+      final int edgeType = edge[0];
+      final int u = edge[1] - 1;
+      final int v = edge[2] - 1;
+      switch (edgeType) {
+        case 3:
+          if (alice.unionByRank(u, v) | bob.unionByRank(u, v))
+            ++essentialEdges;
+          break;
+        case 2:
+          if (bob.unionByRank(u, v))
+            ++essentialEdges;
+          break;
+        case 1:
+          if (alice.unionByRank(u, v))
+            ++essentialEdges;
+          break;
+      }
+    }
+    return alice.getComponentCount() == 1 && bob.getComponentCount() == 1 ? edgeList.length - essentialEdges : -1;
+  }
+}
