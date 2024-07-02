@@ -1,0 +1,20 @@
+class Solution {
+  public int[] intersect(int[] array1, int[] array2) {
+    if (array1.length > array2.length)
+      return intersect(array2, array1);
+
+    List<Integer> result = new ArrayList<>();
+    Map<Integer, Integer> frequencyMap = new HashMap<>();
+
+    for (final int element : array1)
+      frequencyMap.put(element, frequencyMap.getOrDefault(element, 0) + 1);
+
+    for (final int element : array2)
+      if (frequencyMap.containsKey(element) && frequencyMap.get(element) > 0) {
+        result.add(element);
+        frequencyMap.put(element, frequencyMap.get(element) - 1);
+      }
+
+    return result.stream().mapToInt(Integer::intValue).toArray();
+  }
+}
