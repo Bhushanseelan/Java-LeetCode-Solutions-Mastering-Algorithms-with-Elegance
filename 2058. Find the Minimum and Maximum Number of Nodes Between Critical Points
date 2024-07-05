@@ -1,0 +1,28 @@
+class Solution {
+  public int[] nodesBetweenCriticalPoints(ListNode head) {
+    int minimumDistance = Integer.MAX_VALUE;
+    int firstCriticalPointIndex = -1;
+    int previousCriticalPointIndex = -1;
+    int currentIndex = 1;
+    ListNode previousNode = head;      // Point to the index 0.
+    ListNode currentNode = head.next; // Point to the index 1.
+
+    while (currentNode.next != null) {
+      if (currentNode.val > previousNode.val && currentNode.val > currentNode.next.val ||
+          currentNode.val < previousNode.val && currentNode.val < currentNode.next.val) {
+        if (firstCriticalPointIndex == -1) // Only assign once.
+          firstCriticalPointIndex = currentIndex;
+        if (previousCriticalPointIndex != -1)
+          minimumDistance = Math.min(minimumDistance, currentIndex - previousCriticalPointIndex);
+        previousCriticalPointIndex = currentIndex;
+      }
+      previousNode = currentNode;
+      currentNode = currentNode.next;
+      ++currentIndex;
+    }
+
+    if (minimumDistance == Integer.MAX_VALUE)
+      return new int[] {-1, -1};
+    return new int[] {minimumDistance, previousCriticalPointIndex - firstCriticalPointIndex};
+  }
+}
