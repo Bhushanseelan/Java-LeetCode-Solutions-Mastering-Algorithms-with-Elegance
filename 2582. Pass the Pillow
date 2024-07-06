@@ -1,0 +1,9 @@
+class Solution {
+  public int passThePillow(int players, int seconds) {
+    // Repeat every (players - 1) * 2 seconds.
+    seconds %= (players - 1) * 2;
+    if (seconds < players) // Go forward from 1.
+      return 1 + seconds;
+    return players - (seconds - (players - 1)); // Go backward from players.
+  }
+}
