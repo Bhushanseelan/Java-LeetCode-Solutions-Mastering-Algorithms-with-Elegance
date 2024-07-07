@@ -1,0 +1,12 @@
+class Solution {
+  public int numWaterBottles(int initialBottles, int exchangeRate) {
+    int totalBottles = initialBottles;
+
+    while (initialBottles >= exchangeRate) {
+      totalBottles += initialBottles / exchangeRate;
+      initialBottles = initialBottles / exchangeRate + initialBottles % exchangeRate;
+    }
+
+    return totalBottles;
+  }
+}
