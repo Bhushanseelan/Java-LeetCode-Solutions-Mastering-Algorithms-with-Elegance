@@ -1,0 +1,23 @@
+class Solution {
+  public String reverseParentheses(String s) {
+    Deque<Integer> indexStack = new ArrayDeque<>();
+    StringBuilder resultBuilder = new StringBuilder();
+
+    for (final char ch : s.toCharArray()) {
+      if (ch == '(') {
+        indexStack.push(resultBuilder.length());
+      } else if (ch == ')') {
+        StringBuilder tempReversed = new StringBuilder();
+        for (int len = resultBuilder.length() - indexStack.pop(); len > 0; --len) {
+          tempReversed.append(resultBuilder.charAt(resultBuilder.length() - 1));
+          resultBuilder.deleteCharAt(resultBuilder.length() - 1);
+        }
+        resultBuilder.append(tempReversed);
+      } else {
+        resultBuilder.append(ch);
+      }
+    }
+
+    return resultBuilder.toString();
+  }
+}
