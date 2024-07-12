@@ -1,0 +1,29 @@
+class Solution {
+  public int maximumGain(String str, int x, int y) {
+    return x > y ? getPoints(str, "ab", x, "ba", y) : getPoints(str, "ba", y, "ab", x);
+  }
+
+  private int getPoints(final String str, final String firstSub, int firstPoints, final String secondSub, int secondPoints) {
+    int totalPoints = 0;
+    Stack<Character> stackOne = new Stack<>();
+    Stack<Character> stackTwo = new Stack<>();
+
+    for (final char ch : str.toCharArray())
+      if (!stackOne.isEmpty() && stackOne.peek() == firstSub.charAt(0) && ch == firstSub.charAt(1)) {
+        stackOne.pop();
+        totalPoints += firstPoints;
+      } else {
+        stackOne.push(ch);
+      }
+
+    for (final char ch : stackOne)
+      if (!stackTwo.isEmpty() && stackTwo.peek() == secondSub.charAt(0) && ch == secondSub.charAt(1)) {
+        stackTwo.pop();
+        totalPoints += secondPoints;
+      } else {
+        stackTwo.push(ch);
+      }
+
+    return totalPoints;
+  }
+}
