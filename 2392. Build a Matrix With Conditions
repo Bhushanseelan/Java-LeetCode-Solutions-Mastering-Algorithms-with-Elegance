@@ -1,0 +1,60 @@
+import java.util.*;
+
+class Solution {
+  public int[][] buildMatrix(int k, int[][] rowConditions, int[][] colConditions) {
+    List<Integer> rowOrder = topologicalSort(rowConditions, k);
+    if (rowOrder.isEmpty())
+      return new int[][] {};
+
+    List<Integer> colOrder = topologicalSort(colConditions, k);
+    if (colOrder.isEmpty())
+      return new int[][] {};
+
+    int[][] resultMatrix = new int[k][k];
+    int[] nodeToRowMap = new int[k + 1];
+
+    for (int i = 0; i < k; ++i)
+      nodeToRowMap[rowOrder.get(i)] = i;
+
+    for (int j = 0; j < k; ++j) {
+      final int currentNode = colOrder.get(j);
+      final int rowIndex = nodeToRowMap[currentNode];
+      resultMatrix[rowIndex][j] = currentNode;
+    }
+
+    return resultMatrix;
+  }
+
+  private List<Integer> topologicalSort(int[][] conditions, int n) {
+    List<Integer> sortedOrder = new ArrayList<>();
+    List<Integer>[] adjacencyList = new List[n + 1];
+    int[] inDegreeCount = new int[n + 1];
+    Queue<Integer> processingQueue = new ArrayDeque<>();
+
+    for (int i = 1; i <= n; ++i)
+      adjacencyList[i] = new ArrayList<>();
+
+    // Build the graph.
+    for (int[] condition : conditions) {
+      final int fromNode = condition[0];
+      final int toNode = condition[1];
+      adjacencyList[fromNode].add(toNode);
+      ++inDegreeCount[toNode];
+    }
+
+    // Perform topological sorting.
+    for (int i = 1; i <= n; ++i)
+      if (inDegreeCount[i] == 0)
+        processingQueue.offer(i);
+
+    while (!processingQueue.isEmpty()) {
+      final int currentNode = processingQueue.poll();
+      sortedOrder.add(currentNode);
+      for (final int adjacentNode : adjacencyList[currentNode])
+        if (--inDegreeCount[adjacentNode] == 0)
+          processingQueue.offer(adjacentNode);
+    }
+
+    return sortedOrder.size() == n ? sortedOrder : new ArrayList<>();
+  }
+}
