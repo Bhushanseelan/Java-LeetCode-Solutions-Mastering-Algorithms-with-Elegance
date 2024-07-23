@@ -1,0 +1,33 @@
+class T {
+  public int number;
+  public int frequency;
+  public T(int number, int frequency) {
+    this.number = number;
+    this.frequency = frequency;
+  }
+}
+
+class Solution {
+  public int[] frequencySort(int[] elements) {
+    int[] result = new int[elements.length];
+    int resultIndex = 0;
+    Map<Integer, Integer> frequencyMap = new HashMap<>();
+    Queue<T> priorityQueue =
+        new PriorityQueue<>((a, b) -> a.frequency == b.frequency ? b.number - a.number : a.frequency - b.frequency);
+
+    for (final int element : elements)
+      frequencyMap.merge(element, 1, Integer::sum);
+
+    for (Map.Entry<Integer, Integer> entry : frequencyMap.entrySet())
+      priorityQueue.offer(new T(entry.getKey(), entry.getValue()));
+
+    while (!priorityQueue.isEmpty()) {
+      final int number = priorityQueue.peek().number;
+      final int frequency = priorityQueue.poll().frequency;
+      for (int i = 0; i < frequency; ++i)
+        result[resultIndex++] = number;
+    }
+
+    return result;
+  }
+}
