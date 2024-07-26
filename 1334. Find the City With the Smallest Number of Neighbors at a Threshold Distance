@@ -1,0 +1,43 @@
+class Solution {
+  public int findTheCity(int n, int[][] edges, int distanceThreshold) {
+    int resultCity = -1;
+    int minReachableCities = n;
+    int[][] shortestDistances = calculateShortestDistances(n, edges, distanceThreshold);
+
+    for (int city = 0; city < n; ++city) {
+      int reachableCitiesCount = 0;
+      for (int otherCity = 0; otherCity < n; ++otherCity)
+        if (shortestDistances[city][otherCity] <= distanceThreshold)
+          ++reachableCitiesCount;
+      if (reachableCitiesCount <= minReachableCities) {
+        resultCity = city;
+        minReachableCities = reachableCitiesCount;
+      }
+    }
+
+    return resultCity;
+  }
+
+  private int[][] calculateShortestDistances(int n, int[][] edges, int distanceThreshold) {
+    int[][] distances = new int[n][n];
+    Arrays.stream(distances).forEach(row -> Arrays.fill(row, distanceThreshold + 1));
+
+    for (int city = 0; city < n; ++city)
+      distances[city][city] = 0;
+
+    for (int[] edge : edges) {
+      final int city1 = edge[0];
+      final int city2 = edge[1];
+      final int weight = edge[2];
+      distances[city1][city2] = weight;
+      distances[city2][city1] = weight;
+    }
+
+    for (int intermediate = 0; intermediate < n; ++intermediate)
+      for (int city1 = 0; city1 < n; ++city1)
+        for (int city2 = 0; city2 < n; ++city2)
+          distances[city1][city2] = Math.min(distances[city1][city2], distances[city1][intermediate] + distances[intermediate][city2]);
+
+    return distances;
+  }
+}
