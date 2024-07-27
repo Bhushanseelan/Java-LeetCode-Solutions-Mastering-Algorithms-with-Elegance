@@ -1,0 +1,33 @@
+class Solution {
+  public long minimumCost(String source, String target, char[] original, char[] changed, int[] cost) {
+    long totalCost = 0;
+    // distance[src][dst] := the minimum distance to change ('a' + src) to ('a' + dst)
+    long[][] distance = new long[26][26];
+    Arrays.stream(distance).forEach(row -> Arrays.fill(row, Long.MAX_VALUE));
+
+    for (int i = 0; i < cost.length; ++i) {
+      final int src = original[i] - 'a';
+      final int dst = changed[i] - 'a';
+      distance[src][dst] = Math.min(distance[src][dst], cost[i]);
+    }
+
+    for (int k = 0; k < 26; ++k)
+      for (int i = 0; i < 26; ++i)
+        if (distance[i][k] < Long.MAX_VALUE)
+          for (int j = 0; j < 26; ++j)
+            if (distance[k][j] < Long.MAX_VALUE)
+              distance[i][j] = Math.min(distance[i][j], distance[i][k] + distance[k][j]);
+
+    for (int i = 0; i < source.length(); ++i) {
+      if (source.charAt(i) == target.charAt(i))
+        continue;
+      final int src = source.charAt(i) - 'a';
+      final int dst = target.charAt(i) - 'a';
+      if (distance[src][dst] == Long.MAX_VALUE)
+        return -1;
+      totalCost += distance[src][dst];
+    }
+
+    return totalCost;
+  }
+}
