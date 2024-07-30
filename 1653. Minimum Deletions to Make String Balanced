@@ -1,0 +1,16 @@
+class Solution {
+  public int minimumDeletions(String input) {
+    int deletions = 0;
+    int countB = 0;
+
+    for (final char character : input.toCharArray()) {
+      if (character == 'a') {
+        deletions = Math.min(deletions + 1, countB);
+      } else {
+        ++countB;
+      }
+    }
+
+    return deletions;
+  }
+}
