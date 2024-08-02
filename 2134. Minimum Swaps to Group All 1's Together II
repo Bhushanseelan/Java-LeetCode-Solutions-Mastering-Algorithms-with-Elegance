@@ -1,0 +1,18 @@
+class Solution {
+  public int minSwaps(int[] nums) {
+    final int length = nums.length;
+    final int onesCount = (int) Arrays.stream(nums).filter(num -> num == 1).count();
+    int currentOnes = 0;    
+    int maxCurrentOnes = 0; 
+
+    for (int index = 0; index < length * 2; ++index) {
+      if (index >= onesCount && nums[(index - onesCount) % length] == 1)
+        --currentOnes;
+      if (nums[index % length] == 1)
+        ++currentOnes;
+      maxCurrentOnes = Math.max(maxCurrentOnes, currentOnes);
+    }
+
+    return onesCount - maxCurrentOnes;
+  }
+}
