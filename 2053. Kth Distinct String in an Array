@@ -1,0 +1,25 @@
+class Solution {
+
+    public String kthDistinct(String[] array, int position) {
+        Map<String, Integer> countMap = new HashMap<>();
+
+        // First pass: Populate the count map
+        for (String element : array) {
+            countMap.put(element, countMap.getOrDefault(element, 0) + 1);
+        }
+
+        // Second pass: Find the k-th distinct string
+        for (String element : array) {
+            // Check if the current string is distinct
+            if (countMap.get(element) == 1) {
+                position--;
+            }
+            // When position reaches 0, we have found the k-th distinct string
+            if (position == 0) {
+                return element;
+            }
+        }
+
+        return "";
+    }
+}
